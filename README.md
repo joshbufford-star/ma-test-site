@@ -16,7 +16,7 @@ Two environment variables in Netlify (Site settings → Environment variables):
 | Key | Value |
 |-----|-------|
 | `ANTHROPIC_API_KEY` | your Anthropic API key (required for Ask the Guide) |
-| `LEADER_PASSWORD` | the shared leader password for the directory (defaults to `sharpen2717` if unset) |
+| `LEADER_PASSWORD` | the shared leader password for the directory (required; pick your own) |
 
 Optional:
 | `CLAUDE_MODEL` | model id, defaults to `claude-sonnet-4-6`. Use `claude-haiku-4-5-20251001` to cut cost. |

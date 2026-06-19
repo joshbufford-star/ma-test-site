@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>Men's Alliance — Source Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0e0d0b;--panel:#16140f;--parch:#e9e3d5;--parch2:#d8cfba;--ember:#c2410c;--ember2:#e2742f;--ash:#8a8170;--line:#2b2820;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Spectral',Georgia,serif;color:var(--parch);background:var(--ink);min-height:100vh;}
+.cap{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.06em;}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px 64px;}
+.top{display:flex;align-items:center;gap:14px;padding:26px 0 18px;border-bottom:1px solid var(--line);}
+.badge{width:46px;height:46px;flex:none;}
+.name{font-family:'Oswald';font-weight:700;font-size:20px;letter-spacing:.04em;line-height:1;}
+.sub{font-family:'Oswald';font-weight:500;font-size:10.5px;letter-spacing:.32em;color:var(--ember2);margin-top:4px;}
+.tabs{display:flex;gap:6px;margin:18px 0 6px;}
+.tab{font-family:'Oswald';text-transform:uppercase;letter-spacing:.08em;font-size:12px;font-weight:600;background:none;border:1px solid var(--line);color:var(--ash);padding:8px 14px;cursor:pointer;border-radius:2px;}
+.tab.on{color:var(--ink);background:var(--parch);border-color:var(--parch);}
+.tab:focus-visible{outline:2px solid var(--ember2);outline-offset:2px;}
+.h{font-family:'Oswald';font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:13px;color:var(--ash);margin:26px 0 10px;}
+.ask{display:flex;margin-top:8px;border:1px solid var(--line);border-radius:3px;overflow:hidden;background:var(--panel);}
+.input{flex:1;background:transparent;border:none;color:var(--parch);font-family:'Spectral';font-size:16px;padding:15px 16px;}
+.input::placeholder{color:#6f6757;}
+.input:focus{outline:none;}
+.go{font-family:'Oswald';text-transform:uppercase;letter-spacing:.08em;font-weight:600;font-size:13px;border:none;background:var(--ember);color:#fff;padding:0 22px;cursor:pointer;}
+.go:disabled{opacity:.5;cursor:default;}
+.go:focus-visible{outline:2px solid #fff;outline-offset:-3px;}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;}
+.chip{font-family:'Spectral';font-size:13px;color:var(--parch2);background:none;border:1px solid var(--line);padding:6px 11px;border-radius:14px;cursor:pointer;}
+.chip:hover{border-color:var(--ember);color:var(--ember2);}
+.card{margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:4px;}
+.ans{padding:20px 22px 6px;font-size:17px;line-height:1.62;}
+.quote{margin:14px 22px 0;border-left:3px solid var(--ember);background:#100f0c;padding:14px 18px;font-style:italic;color:var(--parch);font-size:15.5px;line-height:1.55;}
+.cite{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 22px 0;padding:12px 0 0;border-top:1px solid var(--line);}
+.tag{font-family:'Oswald';text-transform:uppercase;letter-spacing:.07em;font-size:11px;font-weight:600;background:var(--parch);color:var(--ink);padding:5px 10px;border-radius:2px;}
+.tagsub{font-family:'Oswald';text-transform:uppercase;letter-spacing:.05em;font-size:11px;color:var(--ash);}
+.srcwrap{margin:14px 22px 4px;}
+.srcbtn{font-family:'Oswald';text-transform:uppercase;letter-spacing:.06em;font-size:11.5px;font-weight:600;color:var(--ember2);background:none;border:1px solid var(--line);padding:8px 12px;border-radius:2px;cursor:pointer;}
+.srcbody{margin:10px 0 0;font-size:14px;line-height:1.6;color:var(--parch2);max-height:230px;overflow:auto;border:1px dashed var(--line);padding:12px 14px;border-radius:3px;}
+.disc{padding:0 22px 18px;font-size:12.5px;color:var(--ash);line-height:1.5;}
+.load{margin-top:22px;font-family:'Oswald';text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--ember2);}
+.err{margin-top:18px;color:var(--ember2);font-size:14px;}
+.fb{margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:22px;}
+.fbh{font-family:'Oswald';font-weight:600;text-transform:uppercase;letter-spacing:.04em;font-size:16px;color:var(--parch);}
+.fbp{font-size:15px;line-height:1.55;color:var(--parch2);margin:8px 0 16px;}
+.opts{display:grid;gap:10px;}
+.opt{display:block;text-decoration:none;border:1px solid var(--line);border-radius:3px;padding:14px 16px;background:#100f0c;}
+.opt:hover{border-color:var(--ember);}
+.optt{font-family:'Oswald';text-transform:uppercase;letter-spacing:.05em;font-weight:600;font-size:13px;color:var(--parch);}
+.optd{font-size:13.5px;color:var(--ash);margin-top:3px;}
+.gate{margin-top:18px;max-width:380px;}
+.glabel{font-size:14px;color:var(--parch2);margin-bottom:8px;}
+.res{margin-top:16px;display:grid;gap:10px;}
+.person{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px 16px;}
+.pcall{font-family:'Oswald';font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:16px;color:var(--parch);}
+.prow{font-size:14px;color:var(--parch2);margin-top:3px;}
+.note{font-size:12px;color:var(--ash);margin-top:8px;font-style:italic;}
+.hidden{display:none;}
+@media (max-width:520px){.ans{font-size:16px;}.go{padding:0 16px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <svg class="badge" viewBox="0 0 100 100" aria-hidden="true">
+      <polygon points="50,4 75,14 86,39 86,61 75,86 50,96 25,86 14,61 14,39 25,14" fill="none" stroke="#e9e3d5" stroke-width="4"/>
+      <g stroke="#e9e3d5" stroke-width="5" stroke-linecap="round">
+        <line x1="32" y1="34" x2="68" y2="66"/><line x1="68" y1="34" x2="32" y2="66"/>
+      </g>
+      <rect x="26" y="30" width="11" height="8" rx="1.5" fill="#e9e3d5" transform="rotate(45 31 34)"/>
+      <rect x="63" y="30" width="11" height="8" rx="1.5" fill="#e9e3d5" transform="rotate(-45 69 34)"/>
+      <text x="50" y="60" text-anchor="middle" font-family="Oswald, sans-serif" font-size="9" fill="#c2410c" font-weight="700">27:17</text>
+    </svg>
+    <div>
+      <div class="name">MEN'S ALLIANCE</div>
+      <div class="sub">TRIBAL · RUGGED · REAL</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" id="tab-ask">Ask the Guide</button>
+    <button class="tab" id="tab-dir">Tribesman Directory</button>
+  </div>
+
+  <!-- ASK -->
+  <div id="view-ask">
+    <div class="h">Ask a question — answered only from MA source documents</div>
+    <div class="ask">
+      <input class="input" id="q" placeholder="Type your question…" autocomplete="off"/>
+      <button class="go" id="askBtn">Ask</button>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div id="askOut"></div>
+  </div>
+
+  <!-- DIRECTORY -->
+  <div id="view-dir" class="hidden">
+    <div id="gate">
+      <div class="h">Leaders only — enter the leader password</div>
+      <div class="gate">
+        <div class="glabel">Contact info is restricted to MA leadership.</div>
+        <div class="ask">
+          <input class="input" id="pw" type="password" placeholder="Leader password" autocomplete="off"/>
+          <button class="go" id="pwBtn">Enter</button>
+        </div>
+        <div class="err hidden" id="pwErr">That's not the leader password.</div>
+      </div>
+    </div>
+    <div id="dirMain" class="hidden">
+      <div class="h" id="dirHead">Search by callsign, name, tribe, or role</div>
+      <div class="ask">
+        <input class="input" id="dq" placeholder="e.g. Eagle, or a name, or a tribe…" autocomplete="off"/>
+      </div>
+      <div class="res" id="dirRes"></div>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

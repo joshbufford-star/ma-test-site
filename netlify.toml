@@ -1,16 +1,15 @@
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "LEADER_PASSWORD,ANTHROPIC_API_KEY"
 [build]
   publish = "public"
   functions = "netlify/functions"
-
 [functions]
   node_bundler = "esbuild"
   included_files = ["netlify/functions/*.json"]
-
 [[redirects]]
   from = "/api/ask"
   to = "/.netlify/functions/ask"
   status = 200
-
 [[redirects]]
   from = "/api/directory"
   to = "/.netlify/functions/directory"

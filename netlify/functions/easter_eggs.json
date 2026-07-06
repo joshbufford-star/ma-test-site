@@ -60,5 +60,50 @@
       "who has the best tribe"
     ],
     "answer": "The one you show up to. Next question."
+  },
+  {
+    "id": "goose-say",
+    "triggers": [
+      "what does a goose say",
+      "what does goose say",
+      "what sound does a goose make",
+      "what noise does a goose make"
+    ],
+    "answer": "Holy Smokes!"
+  },
+  {
+    "id": "thors-beard",
+    "triggers": [
+      "what does thors beard smell like",
+      "how does thors beard smell",
+      "what does thor smell like",
+      "smell of thors beard"
+    ],
+    "answer": "Beard oil, Tribe cigars and Becky's kisses. Not in that order."
+  },
+  {
+    "id": "where-ftx",
+    "triggers": [
+      "where is my ftx",
+      "where is the ftx",
+      "where will my ftx be",
+      "where will the ftx be held",
+      "what is the ftx location"
+    ],
+    "answer": "You'll know when you need to know."
+  },
+  {
+    "id": "ruck-weight",
+    "triggers": [
+      "is it a bag with a total of 30 pounds or an additional 30 pounds",
+      "is the bag 30 pounds total or an additional 30 pounds",
+      "does the ruck weigh 30 pounds total or additional",
+      "is it 30 pounds total or 30 pounds extra",
+      "is the 30 pounds including the bag or added weight",
+      "do i carry 30 pounds total or additional",
+      "is the ruck thirty pounds total or extra",
+      "is it thirty pounds total or an additional thirty pounds"
+    ],
+    "answer": "Do what you think is best."
   }
 ]

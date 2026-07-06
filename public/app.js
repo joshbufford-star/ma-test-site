@@ -94,6 +94,12 @@ function renderFallback(question) {
 }
 
 /* ---------- directory ---------- */
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function fmtDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+  return m ? `${MONTHS[+m[2] - 1]} ${+m[3]}, ${m[1]}` : iso;
+}
+
 let leaderPw = "";
 $("pwBtn").onclick = unlock;
 $("pw").addEventListener("keydown", (e) => { if (e.key === "Enter") unlock(); });
@@ -137,10 +143,11 @@ async function searchDir() {
     if (!rows.length) { $("dirRes").innerHTML = `<div class="prow">No match in the roster.</div>`; return; }
     $("dirRes").innerHTML = rows.map((p) => `
       <div class="person">
-        <div class="pcall">${esc(p.callsign || "(no callsign)")}</div>
+        <div class="pcall">${esc(p.callsign || "(no callsign)")}${p.patchClass ? ` <span class="tagsub">Patch Class ${esc(p.patchClass)}</span>` : ""}</div>
         <div class="prow">${esc(p.name)}${p.role ? " · " + esc(p.role) : ""}</div>
         ${p.tribe ? `<div class="prow">Tribe: ${esc(p.tribe)}</div>` : ""}
         <div class="prow">${[esc(p.email), esc(p.phone)].filter(Boolean).join(" · ")}</div>
+        ${p.birthdate ? `<div class="prow">Born: ${esc(fmtDate(p.birthdate))}</div>` : ""}
       </div>`).join("") + (rows.length >= 50 ? `<div class="note">Showing first 50 matches. Narrow your search to see more.</div>` : "");
   } catch (e) { $("dirRes").innerHTML = `<div class="err">Search failed. Try again.</div>`; }
 }

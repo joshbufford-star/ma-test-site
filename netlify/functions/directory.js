@@ -38,6 +38,7 @@ exports.handler = async (event) => {
   const results = hits.slice(0, 50).map((h) => ({
     callsign: h.p.c || "", name: h.p.n || "", role: h.p.r || "",
     tribe: h.p.t || "", email: h.p.e || "", phone: fmtPhone(h.p.p),
+    birthdate: h.p.b || "", patchClass: h.p.pc || "",
   }));
   return { statusCode: 200, headers: { "content-type": "application/json" }, body: JSON.stringify({ results, total: roster.length }) };
 };

@@ -51,4 +51,10 @@ netlify/functions/roster.json   roster (10,090) — server-only, never public
 ```
 
 ## Updating the source docs or roster later
-Replace `corpus.json` / `roster.json` and redeploy. (In a fuller build these get an admin upload screen + real embeddings so retrieval catches meaning, not just keywords.)
+- Corpus: replace `corpus.json` and redeploy.
+- Roster: export a fresh ContactsList users CSV plus the tribes-entries CSV
+  (columns `id`, `title`), then run
+  `python3 scripts/build_roster.py "/path/to/users.csv" "/path/to/tribes.csv"`
+  and redeploy. Phone comes from the `phoneNumber` column (the man's own
+  number, not `emergencyPhoneNumber`); tribe names resolve from the tribes CSV;
+  birthdate and patch class are included when present.

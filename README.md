@@ -8,15 +8,27 @@ Two tools in one site:
 - The roster (10,090 men, with phones/emails) lives **only inside the server function**, never in the public site files. The browser never downloads the full roster. A search returns at most 50 matches, and only after the leader password is checked **on the server**.
 - The Anthropic API key lives in a **server environment variable**, never in the browser.
 
-> Still: a shared password is not real authentication. For anything beyond testing, move to per-leader logins. Don't share the site URL widely while real contact data is loaded.
+> Leaders sign in with per-leader callsign + password credentials from a Google Sheet (see "Per-leader directory logins" below). The shared `LEADER_PASSWORD` remains only as a fallback while the sheet isn't configured.
 
 ## What you must set before it works
-Two environment variables in Netlify (Site settings → Environment variables):
+Environment variables in Netlify (Site settings → Environment variables):
 
 | Key | Value |
 |-----|-------|
 | `ANTHROPIC_API_KEY` | your Anthropic API key (required for Ask the Guide) |
-| `LEADER_PASSWORD` | the shared leader password for the directory (required; pick your own) |
+| `LEADER_CREDS_URL` | Apps Script web app URL serving per-leader logins (see below) |
+| `LEADER_CREDS_TOKEN` | shared secret matching the TOKEN in that Apps Script |
+| `LEADER_PASSWORD` | fallback shared directory password, used only while `LEADER_CREDS_URL` is unset |
+
+## Per-leader directory logins
+Leaders sign in with their own callsign + password, managed in a Google Sheet
+(columns: `callsign | password | active`). The sheet is served by
+[`apps_script/leader_credentials.gs`](apps_script/leader_credentials.gs)
+(setup steps at the top of the file) and cached by the site for 5 minutes, so
+adding/removing a leader in the sheet takes effect within ~5 minutes with no
+redeploy. It's a gate only — nothing tracks which leader searched what. If
+the sheet is ever unreachable, the last-fetched list keeps working until it
+recovers.
 
 Optional:
 | `CLAUDE_MODEL` | model id, defaults to `claude-sonnet-4-6`. Use `claude-haiku-4-5-20251001` to cut cost. |

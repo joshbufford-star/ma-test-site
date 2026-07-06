@@ -103,14 +103,17 @@ body{margin:0;font-family:'Spectral',Georgia,serif;color:var(--parch);background
   <!-- DIRECTORY -->
   <div id="view-dir" class="hidden">
     <div id="gate">
-      <div class="h">Leaders only — enter the leader password</div>
+      <div class="h">Leaders only — enter your leader login</div>
       <div class="gate">
         <div class="glabel">Contact info is restricted to MA leadership.</div>
+        <div class="ask" style="margin-bottom:8px;">
+          <input class="input" id="cs" placeholder="Callsign" autocomplete="off"/>
+        </div>
         <div class="ask">
-          <input class="input" id="pw" type="password" placeholder="Leader password" autocomplete="off"/>
+          <input class="input" id="pw" type="password" placeholder="Password" autocomplete="off"/>
           <button class="go" id="pwBtn">Enter</button>
         </div>
-        <div class="err hidden" id="pwErr">That's not the leader password.</div>
+        <div class="err hidden" id="pwErr">That's not a valid leader login.</div>
       </div>
     </div>
     <div id="dirMain" class="hidden">

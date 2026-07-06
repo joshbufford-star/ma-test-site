@@ -1,9 +1,49 @@
 // netlify/functions/directory.js
-// Password-gated tribesman lookup. The roster (PII) lives ONLY here in the
+// Login-gated tribesman lookup. The roster (PII) lives ONLY here in the
 // function bundle, never in the public site, and is never returned in bulk.
+//
+// Auth: per-leader callsign|password rows from a Google Sheet, served by an
+// Apps Script endpoint (see apps_script/leader_credentials.gs) and cached
+// here for 5 minutes. Gate only — no per-user tracking of any kind. Falls
+// back to the shared LEADER_PASSWORD env var until the sheet is configured.
 const roster = require("./roster.json");
 
-const LEADER_PASSWORD = process.env.LEADER_PASSWORD || "sharpen2717";
+const CACHE_TTL_MS = 5 * 60 * 1000;
+let credCache = { leaders: null, at: 0 };
+
+async function getLeaders() {
+  const url = process.env.LEADER_CREDS_URL;
+  if (!url) return null; // per-leader logins not configured
+  if (credCache.leaders && Date.now() - credCache.at < CACHE_TTL_MS) return credCache.leaders;
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ token: process.env.LEADER_CREDS_TOKEN || "" }),
+      signal: AbortSignal.timeout(4000),
+    });
+    const data = await res.json();
+    if (data && data.ok && Array.isArray(data.leaders)) {
+      credCache = { leaders: data.leaders, at: Date.now() };
+      return data.leaders;
+    }
+  } catch (e) {}
+  return credCache.leaders; // sheet unreachable: stale cache beats a lockout
+}
+
+// true = valid login, false = rejected, null = server not configured
+async function authenticate(body) {
+  const leaders = await getLeaders();
+  if (leaders) {
+    const cs = (body.callsign || "").trim().toLowerCase();
+    const pw = (body.password || "").trim();
+    if (!cs || !pw) return false;
+    return leaders.some((l) => String(l.callsign).trim().toLowerCase() === cs && String(l.password) === pw);
+  }
+  const shared = (process.env.LEADER_PASSWORD || "").trim();
+  if (!shared) return null;
+  return (body.password || "").trim() === shared;
+}
 
 function fmtPhone(p) {
   if (!p) return "";
@@ -17,10 +57,11 @@ exports.handler = async (event) => {
   if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method not allowed" };
   let body = {};
   try { body = JSON.parse(event.body || "{}"); } catch (e) {}
-  const pw = (body.password || "").trim();
   const q = (body.query || "").trim().toLowerCase();
 
-  if (pw !== LEADER_PASSWORD) return { statusCode: 401, body: JSON.stringify({ error: "Invalid leader password." }) };
+  const auth = await authenticate(body);
+  if (auth === null) return { statusCode: 500, body: JSON.stringify({ error: "Directory not configured: set LEADER_CREDS_URL or LEADER_PASSWORD in Netlify." }) };
+  if (!auth) return { statusCode: 401, body: JSON.stringify({ error: "Invalid leader login." }) };
   if (q.length < 2) return { statusCode: 200, body: JSON.stringify({ results: [] }) };
 
   const hits = [];

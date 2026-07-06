@@ -19,8 +19,8 @@
  * template. Any non-blank Status stops a row from appearing in later digests.
  */
 
-var SHEET_ID = "PASTE_SHEET_ID_HERE";
-var TOKEN = "PASTE_A_LONG_RANDOM_STRING_HERE";
+var SHEET_ID = "1_sP8sHKHhn8cgSBKMv6vyzvHdLwC5l031qoWK-MXeko";
+var TOKEN = "1_sP8sHKHhn8cgSBKMv6vyzvHdLwC5l031qoWK-MXeko";
 var DIGEST_TO = "sheepdog@mensalliancetribe.com";
 
 var ALL_TAB = "All Questions";

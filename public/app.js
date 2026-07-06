@@ -109,22 +109,24 @@ function fmtDate(iso) {
   return m ? `${MONTHS[+m[2] - 1]} ${+m[3]}, ${m[1]}` : iso;
 }
 
-let leaderPw = "";
+let leaderPw = "", leaderCs = "";
 $("pwBtn").onclick = unlock;
 $("pw").addEventListener("keydown", (e) => { if (e.key === "Enter") unlock(); });
+$("cs").addEventListener("keydown", (e) => { if (e.key === "Enter") $("pw").focus(); });
 
 async function unlock() {
   const pw = $("pw").value.trim();
+  const cs = $("cs").value.trim();
   if (!pw) return;
   // validate by attempting a probe search
   try {
     const r = await fetch("/api/directory", {
       method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ password: pw, query: "" }),
+      body: JSON.stringify({ callsign: cs, password: pw, query: "" }),
     });
     if (r.status === 401) { $("pwErr").classList.remove("hidden"); return; }
     const data = await r.json();
-    leaderPw = pw;
+    leaderPw = pw; leaderCs = cs;
     $("pwErr").classList.add("hidden");
     $("gate").classList.add("hidden");
     $("dirMain").classList.remove("hidden");
@@ -145,7 +147,7 @@ async function searchDir() {
   try {
     const r = await fetch("/api/directory", {
       method: "POST", headers: { "content-type": "application/json" },
-      body: JSON.stringify({ password: leaderPw, query: q }),
+      body: JSON.stringify({ callsign: leaderCs, password: leaderPw, query: q }),
     });
     const data = await r.json();
     const rows = data.results || [];

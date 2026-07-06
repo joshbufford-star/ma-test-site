@@ -79,6 +79,25 @@ function eggAnswer(egg) {
   return egg.answer;
 }
 
+// Per-IP rate limit: ASK_RATE_LIMIT questions per rolling hour (default 20).
+// In-memory per warm function instance — resets on cold start, which is fine
+// for throttling; the goal is stopping hammering, not perfect accounting.
+// The IP is used only for this in-memory counter and is never logged.
+const RATE_LIMIT = Math.max(1, parseInt(process.env.ASK_RATE_LIMIT, 10) || 20);
+const WINDOW_MS = 60 * 60 * 1000;
+const hits = new Map();
+function rateLimited(ip) {
+  const now = Date.now();
+  if (hits.size > 5000) {
+    for (const [k, v] of hits) if (!v.length || now - v[v.length - 1] > WINDOW_MS) hits.delete(k);
+  }
+  const arr = (hits.get(ip) || []).filter((t) => now - t < WINDOW_MS);
+  if (arr.length >= RATE_LIMIT) { hits.set(ip, arr); return true; }
+  arr.push(now);
+  hits.set(ip, arr);
+  return false;
+}
+
 // Anonymous question log: timestamp + question + outcome only (no IP, no
 // user). POSTs to an Apps Script web app (see apps_script/question_log.gs).
 // Short timeout + swallowed errors so a slow or dead log endpoint can never
@@ -119,6 +138,16 @@ exports.handler = async (event) => {
   let question = "";
   try { question = (JSON.parse(event.body || "{}").question || "").trim(); } catch (e) {}
   if (!question) return { statusCode: 400, body: JSON.stringify({ error: "No question provided." }) };
+
+  const h = event.headers || {};
+  const ip = h["x-nf-client-connection-ip"] || (h["x-forwarded-for"] || "").split(",")[0].trim() || "unknown";
+  if (rateLimited(ip)) {
+    return {
+      statusCode: 429,
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ error: "Easy, tribesman — you've hit the hourly question limit. Take a breath by the fire and ask again in a while." }),
+    };
+  }
 
   // FAQ and easter-egg hits never touch the model, so they work even
   // without an API key. Official FAQ copy wins over eggs on any overlap.

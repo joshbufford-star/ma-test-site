@@ -34,6 +34,12 @@ Optional:
 | `CLAUDE_MODEL` | model id, defaults to `claude-sonnet-4-6`. Use `claude-haiku-4-5-20251001` to cut cost. |
 | `QUESTION_LOG_URL` | Apps Script web app URL for the anonymous question log (see below). Logging is skipped if unset. |
 | `QUESTION_LOG_TOKEN` | shared secret matching the TOKEN in the Apps Script. |
+| `ASK_RATE_LIMIT` | max questions per IP per rolling hour (default 20). |
+
+Cost guardrails: the per-IP throttle above, plus set a monthly spend cap in
+the Anthropic dashboard (console.anthropic.com → Settings → Limits) so a
+runaway can never outspend the budget, and keep `CLAUDE_MODEL` handy to drop
+to a cheaper model if volume grows.
 
 ## Question log + weekly review
 Every question asked is logged anonymously (timestamp, question text, and

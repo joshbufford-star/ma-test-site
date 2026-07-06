@@ -20,6 +20,18 @@ Two environment variables in Netlify (Site settings → Environment variables):
 
 Optional:
 | `CLAUDE_MODEL` | model id, defaults to `claude-sonnet-4-6`. Use `claude-haiku-4-5-20251001` to cut cost. |
+| `QUESTION_LOG_URL` | Apps Script web app URL for the anonymous question log (see below). Logging is skipped if unset. |
+| `QUESTION_LOG_TOKEN` | shared secret matching the TOKEN in the Apps Script. |
+
+## Question log + weekly review
+Every question asked is logged anonymously (timestamp, question text, and
+outcome — faq / egg / answered / unanswered / error; no IP, no user) to a
+Google Sheet via a lightweight Apps Script web app. Unanswered questions also
+land in a "Review Queue" tab, and a weekly trigger drafts a Gmail listing the
+week's open ones. Setup steps are at the top of
+[`apps_script/question_log.gs`](apps_script/question_log.gs). Weekly flow:
+fill the Answer column, set Status to `approved`, and paste the Q&A into
+`faqs.json` using the template above.
 
 ## Deploy — easiest path (Netlify CLI)
 From inside this folder:

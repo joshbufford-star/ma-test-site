@@ -79,6 +79,23 @@ function eggAnswer(egg) {
   return egg.answer;
 }
 
+// Anonymous question log: timestamp + question + outcome only (no IP, no
+// user). POSTs to an Apps Script web app (see apps_script/question_log.gs).
+// Short timeout + swallowed errors so a slow or dead log endpoint can never
+// break an answer. No-op unless QUESTION_LOG_URL is configured.
+async function logQuestion(question, outcome) {
+  const url = process.env.QUESTION_LOG_URL;
+  if (!url) return;
+  try {
+    await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ token: process.env.QUESTION_LOG_TOKEN || "", question, outcome }),
+      signal: AbortSignal.timeout(1500),
+    });
+  } catch (e) {}
+}
+
 function retrieve(q, k = 8) {
   const qt = terms(q); if (!qt.length) return [];
   const qset = new Set(qt);
@@ -107,6 +124,7 @@ exports.handler = async (event) => {
   // without an API key. Official FAQ copy wins over eggs on any overlap.
   const faq = matchFaq(question);
   if (faq) {
+    await logQuestion(question, "faq");
     return {
       statusCode: 200,
       headers: { "content-type": "application/json" },
@@ -118,6 +136,7 @@ exports.handler = async (event) => {
   }
   const egg = matchEgg(question);
   if (egg) {
+    await logQuestion(question, "egg");
     return {
       statusCode: 200,
       headers: { "content-type": "application/json" },
@@ -125,12 +144,15 @@ exports.handler = async (event) => {
     };
   }
 
+  const sources = retrieve(question, 8);
+  if (!sources.length) {
+    await logQuestion(question, "unanswered");
+    return { statusCode: 200, body: JSON.stringify({ answered: false }) };
+  }
+
   if (!process.env.ANTHROPIC_API_KEY) {
     return { statusCode: 500, body: JSON.stringify({ error: "Server is missing ANTHROPIC_API_KEY. Set it in Netlify site settings." }) };
   }
-
-  const sources = retrieve(question, 8);
-  if (!sources.length) return { statusCode: 200, body: JSON.stringify({ answered: false }) };
 
   const srcText = sources.map((s) =>
     `[SOURCE ${s.id}] DOC: ${s.doc} | SECTION: ${s.section}${s.page ? ` | PAGE: ${s.page}` : ""}\n${s.text}`
@@ -166,19 +188,25 @@ ${srcText}`;
     });
     if (!res.ok) {
       const t = await res.text();
+      await logQuestion(question, "error");
       return { statusCode: 502, body: JSON.stringify({ error: "Model call failed", detail: t.slice(0, 300) }) };
     }
     const data = await res.json();
     const text = (data.content || []).filter((b) => b.type === "text").map((b) => b.text).join("").trim();
     const clean = text.replace(/```json/g, "").replace(/```/g, "").trim();
     let parsed;
-    try { parsed = JSON.parse(clean); } catch (e) { return { statusCode: 200, body: JSON.stringify({ answered: false }) }; }
+    try { parsed = JSON.parse(clean); } catch (e) {
+      await logQuestion(question, "unanswered");
+      return { statusCode: 200, body: JSON.stringify({ answered: false }) };
+    }
     const src = sources.find((s) => s.id === parsed.source_id) || sources[0];
     const payload = parsed.answered
       ? { answered: true, answer: parsed.answer, quote: parsed.quote, src: { doc: src.doc, section: src.section, page: src.page, text: src.text } }
       : { answered: false };
+    await logQuestion(question, parsed.answered ? "answered" : "unanswered");
     return { statusCode: 200, headers: { "content-type": "application/json" }, body: JSON.stringify(payload) };
   } catch (e) {
+    await logQuestion(question, "error");
     return { statusCode: 502, body: JSON.stringify({ error: "Could not reach the assistant." }) };
   }
 };

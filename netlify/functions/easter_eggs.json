@@ -1,0 +1,64 @@
+[
+  {
+    "id": "barbarian-ambassador",
+    "triggers": [
+      "who are you",
+      "what are you",
+      "who is the barbarian ambassador",
+      "what is the barbarian ambassador",
+      "who is the ba",
+      "what is the ba",
+      "who is the barbarian bot",
+      "what is the barbarian bot",
+      "are you a robot",
+      "are you an ai",
+      "who made you",
+      "who built you"
+    ],
+    "answer": "I am the Barbarian Ambassador — B.A. if we've bled together. Forged from campfire smoke, burnt coffee, and the source documents of Men's Alliance. I don't sleep. I sharpen."
+  },
+  {
+    "id": "goose",
+    "triggers": [
+      "who is goose",
+      "tell me about goose",
+      "who founded mens alliance",
+      "who started mens alliance",
+      "who is the founder of mens alliance"
+    ],
+    "answer": "Goose founded Men's Alliance — the first fire-starter. Every Tribe fire in the country traces back to one man deciding that men need sharpening. Honk once out of respect."
+  },
+  {
+    "id": "most-common-callsign",
+    "compute": "most_common_callsign",
+    "triggers": [
+      "what callsign is most common",
+      "what is the most common callsign",
+      "most popular callsign",
+      "how many men share my callsign",
+      "what callsign do most men have"
+    ],
+    "answer": "Of the {total} men on the roster, the most common callsign is \"{callsign}\" — {count} men answer to it. Gentlemen, originality is a virtue."
+  },
+  {
+    "id": "great-8",
+    "triggers": [
+      "who is the greatest patch class",
+      "what is the greatest patch class",
+      "what is the best patch class",
+      "which patch class is the best",
+      "which patch class is the greatest"
+    ],
+    "answer": "Need you ask? Obviously it's the Great 8."
+  },
+  {
+    "id": "best-tribe",
+    "triggers": [
+      "what is the best tribe",
+      "which tribe is the best",
+      "what tribe is the greatest",
+      "who has the best tribe"
+    ],
+    "answer": "The one you show up to. Next question."
+  }
+]

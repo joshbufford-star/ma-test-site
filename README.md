@@ -73,6 +73,23 @@ question isn't matching, add its phrasing as an alias. Keep aliases specific —
 a one-word alias like "cost" will intercept every question containing that
 word.
 
+## Easter eggs
+Playful answers live in `netlify/functions/easter_eggs.json` and match the
+same fuzzy way as FAQs (on `triggers[]`), but render as a Barbarian Ambassador
+card with no citation or disclaimer. FAQs win over eggs if both match. Add or
+remove entries by editing the file and redeploying:
+
+```json
+{
+  "id": "short-unique-slug",
+  "triggers": ["ways men might ask it", "one per phrasing"],
+  "answer": "The playful answer."
+}
+```
+
+An entry with `"compute": "most_common_callsign"` fills `{callsign}`,
+`{count}`, and `{total}` in its answer live from the roster.
+
 ## Updating the source docs or roster later
 - Corpus: replace `corpus.json` and redeploy.
 - Roster: export a fresh ContactsList users CSV plus the tribes-entries CSV

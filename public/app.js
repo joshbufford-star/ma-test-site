@@ -42,6 +42,7 @@ async function runAsk() {
     });
     const data = await r.json();
     if (!r.ok) { $("askOut").innerHTML = `<div class="err">${esc(data.error || "Something went wrong.")}</div>`; }
+    else if (data.egg) { renderEgg(data); }
     else if (data.answered) { renderAnswer(data); }
     else { renderFallback(question); }
   } catch (e) {
@@ -72,6 +73,14 @@ function renderAnswer(d) {
     const b = $("srcBody"); const hidden = b.classList.toggle("hidden");
     $("srcToggle").textContent = hidden ? "View full passage" : "Hide full passage";
   };
+}
+
+function renderEgg(d) {
+  $("askOut").innerHTML = `
+    <div class="card egg">
+      <div class="eggh">☠ The Barbarian Ambassador speaks</div>
+      <div class="ans eggans">${esc(d.answer).replace(/\n\n?/g, "<br><br>")}</div>
+    </div>`;
 }
 
 function renderFallback(question) {

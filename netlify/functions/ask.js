@@ -3,6 +3,7 @@
 // only ever sees the retrieved passages. The API key stays server-side.
 const corpus = require("./corpus.json");
 const faqs = require("./faqs.json");
+const eggs = require("./easter_eggs.json");
 
 const MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-4-6";
 
@@ -23,13 +24,21 @@ const dice = (a, b) => {
   let inter = 0; a.forEach((t) => { if (b.has(t)) inter++; });
   return (2 * inter) / (a.size + b.size);
 };
-function matchFaq(question) {
+const normPhrase = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+function matchEntries(question, entries, candidatesOf) {
   const qFull = new Set(mterms(question));
-  if (!qFull.size) return null;
+  if (!qFull.size) {
+    // question is all stopwords ("who are you?") — exact phrase match only
+    const qn = normPhrase(question);
+    for (const entry of entries) {
+      for (const cand of candidatesOf(entry)) if (normPhrase(cand) === qn) return entry;
+    }
+    return null;
+  }
   const qCore = new Set([...qFull].filter((t) => !BRAND.has(t)));
   let best = null, bestScore = 0;
-  for (const f of faqs) {
-    for (const cand of [f.question, ...(f.aliases || [])]) {
+  for (const entry of entries) {
+    for (const cand of candidatesOf(entry)) {
       const cFull = new Set(mterms(cand));
       if (!cFull.size) continue;
       const cCore = new Set([...cFull].filter((t) => !BRAND.has(t)));
@@ -42,10 +51,32 @@ function matchFaq(question) {
         // one side is only brand words: require a near-exact full match
         score = dice(qFull, cFull) >= 0.9 ? dice(qFull, cFull) : 0;
       }
-      if (score > bestScore) { bestScore = score; best = f; }
+      if (score > bestScore) { bestScore = score; best = entry; }
     }
   }
   return bestScore >= 0.72 ? best : null;
+}
+const matchFaq = (q) => matchEntries(q, faqs, (f) => [f.question, ...(f.aliases || [])]);
+const matchEgg = (q) => matchEntries(q, eggs, (e) => e.triggers || []);
+
+// Easter eggs marked "compute" are filled in live from the roster.
+function eggAnswer(egg) {
+  if (egg.compute === "most_common_callsign") {
+    const roster = require("./roster.json");
+    const counts = {};
+    for (const p of roster) {
+      const c = (p.c || "").replace(/[^a-zA-Z0-9 .\-!]/g, "").trim().toLowerCase();
+      if (c) counts[c] = (counts[c] || 0) + 1;
+    }
+    let top = "", n = 0;
+    for (const c in counts) if (counts[c] > n) { n = counts[c]; top = c; }
+    const display = roster.find((p) => (p.c || "").replace(/[^a-zA-Z0-9 .\-!]/g, "").trim().toLowerCase() === top);
+    return egg.answer
+      .replace("{callsign}", (display ? display.c.replace(/[^a-zA-Z0-9 .\-!]/g, "").trim() : top))
+      .replace("{count}", n)
+      .replace("{total}", roster.length.toLocaleString("en-US"));
+  }
+  return egg.answer;
 }
 
 function retrieve(q, k = 8) {
@@ -72,7 +103,8 @@ exports.handler = async (event) => {
   try { question = (JSON.parse(event.body || "{}").question || "").trim(); } catch (e) {}
   if (!question) return { statusCode: 400, body: JSON.stringify({ error: "No question provided." }) };
 
-  // FAQ hits never touch the model, so they work even without an API key.
+  // FAQ and easter-egg hits never touch the model, so they work even
+  // without an API key. Official FAQ copy wins over eggs on any overlap.
   const faq = matchFaq(question);
   if (faq) {
     return {
@@ -82,6 +114,14 @@ exports.handler = async (event) => {
         answered: true, faq: true, answer: faq.answer,
         src: { doc: "Men's Alliance FAQs", section: faq.question },
       }),
+    };
+  }
+  const egg = matchEgg(question);
+  if (egg) {
+    return {
+      statusCode: 200,
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ answered: true, egg: true, answer: eggAnswer(egg) }),
     };
   }
 

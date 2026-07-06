@@ -2,6 +2,7 @@
 // Grounded Q&A over MA source documents. Retrieval runs here; the model
 // only ever sees the retrieved passages. The API key stays server-side.
 const corpus = require("./corpus.json");
+const faqs = require("./faqs.json");
 
 const MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-4-6";
 
@@ -9,6 +10,43 @@ const STOP = new Set("the a an and or of to in is are be as at it for on with th
 const stem = (w) => (w.length > 3 && w.endsWith("s") && !w.endsWith("ss")) ? w.slice(0, -1) : w;
 const terms = (s) => (s.toLowerCase().match(/[a-z0-9']+/g) || [])
   .filter((w) => (w.length > 2 || /^\d+$/.test(w)) && !STOP.has(w)).map(stem);
+
+// Curated FAQ layer: fuzzy-match the question against faqs.json BEFORE
+// retrieval. A hit returns the fixed approved answer and never calls the
+// model. Apostrophes are stripped so "what's"/"whats" and "men's"/"mens"
+// compare equal. "men's alliance" appears in nearly every question, so those
+// tokens carry no signal and are ignored while both sides still have real
+// words left.
+const mterms = (s) => terms(String(s).replace(/[''']/g, ""));
+const BRAND = new Set(["men", "mens", "ma", "alliance"]);
+const dice = (a, b) => {
+  let inter = 0; a.forEach((t) => { if (b.has(t)) inter++; });
+  return (2 * inter) / (a.size + b.size);
+};
+function matchFaq(question) {
+  const qFull = new Set(mterms(question));
+  if (!qFull.size) return null;
+  const qCore = new Set([...qFull].filter((t) => !BRAND.has(t)));
+  let best = null, bestScore = 0;
+  for (const f of faqs) {
+    for (const cand of [f.question, ...(f.aliases || [])]) {
+      const cFull = new Set(mterms(cand));
+      if (!cFull.size) continue;
+      const cCore = new Set([...cFull].filter((t) => !BRAND.has(t)));
+      let score;
+      if (qCore.size && cCore.size) {
+        score = dice(qCore, cCore);
+        // every content word of the candidate present in the question
+        if (cCore.size >= 3 && [...cCore].every((t) => qCore.has(t))) score = Math.max(score, 0.9);
+      } else {
+        // one side is only brand words: require a near-exact full match
+        score = dice(qFull, cFull) >= 0.9 ? dice(qFull, cFull) : 0;
+      }
+      if (score > bestScore) { bestScore = score; best = f; }
+    }
+  }
+  return bestScore >= 0.72 ? best : null;
+}
 
 function retrieve(q, k = 8) {
   const qt = terms(q); if (!qt.length) return [];
@@ -30,12 +68,26 @@ function retrieve(q, k = 8) {
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method not allowed" };
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return { statusCode: 500, body: JSON.stringify({ error: "Server is missing ANTHROPIC_API_KEY. Set it in Netlify site settings." }) };
-  }
   let question = "";
   try { question = (JSON.parse(event.body || "{}").question || "").trim(); } catch (e) {}
   if (!question) return { statusCode: 400, body: JSON.stringify({ error: "No question provided." }) };
+
+  // FAQ hits never touch the model, so they work even without an API key.
+  const faq = matchFaq(question);
+  if (faq) {
+    return {
+      statusCode: 200,
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        answered: true, faq: true, answer: faq.answer,
+        src: { doc: "Men's Alliance FAQs", section: faq.question },
+      }),
+    };
+  }
+
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return { statusCode: 500, body: JSON.stringify({ error: "Server is missing ANTHROPIC_API_KEY. Set it in Netlify site settings." }) };
+  }
 
   const sources = retrieve(question, 8);
   if (!sources.length) return { statusCode: 200, body: JSON.stringify({ answered: false }) };

@@ -1,0 +1,247 @@
+[
+  {
+    "id": "mission",
+    "question": "What is the mission of Men's Alliance?",
+    "answer": "Our mission is to sharpen men into the husbands, fathers, and leaders that God designed us to be. Everything that we do is to help men be more like Jesus Christ.",
+    "aliases": [
+      "what is men's alliance",
+      "what does men's alliance do",
+      "purpose of men's alliance",
+      "mission statement"
+    ]
+  },
+  {
+    "id": "different-from-ministries",
+    "question": "How is Men's Alliance different from other men's ministries?",
+    "answer": "In Men's Alliance, we're not trying to be liked by everyone. We're for the men who are more comfortable talking around a fire than sitting inside singing. We're here for men who light up at the idea of flipping tractor tires and swinging 30-pound sledgehammers in the rain, or bear crawling with sandbags up a hill. We're for men who are a little bit rough around the edges and who like to be challenged.",
+    "aliases": [
+      "how is ma different from other ministries",
+      "what makes men's alliance unique",
+      "why is men's alliance different"
+    ]
+  },
+  {
+    "id": "barbarian-ambassadors",
+    "question": "Why do you call yourselves Barbarian Ambassadors?",
+    "answer": "Barbarian: Someone who does not conform to the prevailing culture. Romans 12:2 tells us to not be conformed to this world. Ambassador: A person who represents his sovereign to a foreign land. 2 Corinthians 5:20 tells us that we are called to be ambassadors for Jesus in this world. Our mascot, named \"B.A.\" is a skeleton wearing a top hat. This reminds us to be both non-conforming Barbarians as well as prepared Ambassadors.",
+    "aliases": [
+      "what is a barbarian ambassador",
+      "meaning of barbarian ambassador",
+      "why are you called barbarians"
+    ]
+  },
+  {
+    "id": "workout-expectations",
+    "question": "What sort of workout should I be expecting? I haven't worked out in years.",
+    "answer": "Every workout should be an epic challenge that pushes you to your limit. However, everyone should go at their own speed and is encouraged to just do what they are able to do. We want you to have fun - and not die!",
+    "aliases": [
+      "what is the workout like",
+      "do i need to be in shape",
+      "i haven't worked out in years",
+      "how hard are the workouts",
+      "am i fit enough"
+    ]
+  },
+  {
+    "id": "different-from-workout-groups",
+    "question": "How is Men's Alliance different from other workout groups?",
+    "answer": "We're not a workout group - we're a Tribe. Every Tribe has a 30-minute real-world devotion around a fire. This helps men grow spiritually, as well as grow closer to one another in brotherhood. Men's Alliance is a Christian organization that trains men to become ambassadors for Jesus. We're not just a workout group that prays to a \"higher power.\"",
+    "aliases": [
+      "is this just a workout group",
+      "how is this different from a bootcamp",
+      "more than a workout"
+    ]
+  },
+  {
+    "id": "physical-disability",
+    "question": "I have a physical disability; will I be welcomed at Men's Alliance?",
+    "answer": "Definitely! The workout is not a requirement. The important part is the real-world devotion around the fire. If you need any assistance in getting there just call the local Tribe Leader.",
+    "aliases": [
+      "i have a disability can i come",
+      "can disabled men attend",
+      "i have an injury can i still participate"
+    ]
+  },
+  {
+    "id": "real-world-devotion",
+    "question": "What do you mean by \"real-world devotion\"?",
+    "answer": "Great question! A real-world devotion is when a man shares the real things that he is personally going through. Maybe it's an encouraging word from the Bible that helped him, a current struggle he is dealing with, or a topic that he'd like to hear his Tribe's thoughts on. In short, it's personal. It is not an academic lesson, a Bible study, or going through a book together.",
+    "aliases": [
+      "what is a real world devotion",
+      "what happens around the fire",
+      "what is the devotion"
+    ]
+  },
+  {
+    "id": "curriculum",
+    "question": "What curriculum does Men's Alliance use for their devotions?",
+    "answer": "We don't use any curriculum. Each real-world devotion is whatever the leader has on his heart and mind that week. This way we are never just checking the box for this week's chapter, and every single week the topic is relevant.",
+    "aliases": [
+      "what curriculum do you use",
+      "what bible study do you use",
+      "devotion materials"
+    ]
+  },
+  {
+    "id": "benefit-local-church",
+    "question": "How does Men's Alliance benefit the local church?",
+    "answer": "Men's Alliance comes along side of local churches like a high-octane fuel additive to any men's ministry program! We bring in more men and their families to every church that we partner with, and we awaken and revitalize the men in every church!",
+    "aliases": [
+      "does men's alliance help churches",
+      "how does ma work with churches"
+    ]
+  },
+  {
+    "id": "register",
+    "question": "Do I need to register or sign up before attending a Tribe?",
+    "answer": "Nope. Just bring a bottle of water and show up - we're ready for you! Click on the Tribe nearest you to learn more.",
+    "aliases": [
+      "do i need to sign up",
+      "do i need to register",
+      "can i just show up",
+      "how do i join a tribe"
+    ]
+  },
+  {
+    "id": "cost",
+    "question": "How much does Men's Alliance cost?",
+    "answer": "Men's Alliance Tribes are always free! As a non-profit organization we run purely on donations from people whose lives have been changed by MA.",
+    "aliases": [
+      "how much does it cost",
+      "is men's alliance free",
+      "membership fee",
+      "are there dues"
+    ]
+  },
+  {
+    "id": "not-a-christian",
+    "question": "I am not a Christian, can I still come to Men's Alliance?",
+    "answer": "Absolutely! Men's Alliance is open to all men regardless of their beliefs. However, in order to lead a devotion in Men's Alliance a man must agree with our Statement of Faith.",
+    "aliases": [
+      "i'm not a christian can i come",
+      "are non believers welcome"
+    ]
+  },
+  {
+    "id": "daughter",
+    "question": "Can I bring my daughter to Men's Alliance, we love working out together?",
+    "answer": "That's awesome that you workout with your daughter - keep it up! But Men's Alliance is only for biological men. No exceptions.",
+    "aliases": [
+      "can i bring my daughter",
+      "can women attend",
+      "is men's alliance for women",
+      "are females allowed",
+      "can women come",
+      "are women allowed"
+    ]
+  },
+  {
+    "id": "teenage-son",
+    "question": "I am a single mom and I would love for my teenage son to be involved in this, is that possible!",
+    "answer": "Yes! Men's Alliance is a great place for young men to find strong Christian mentors! Feel free to drop him off at any Men's Alliance Tribe, or call the local Tribe Leader if he needs transportation.",
+    "aliases": [
+      "can my teenage son attend",
+      "can my son come",
+      "single mom son involved"
+    ]
+  },
+  {
+    "id": "denomination",
+    "question": "Is Men's Alliance affiliated with a particular denomination?",
+    "answer": "No, we are interdenominational and we affiliate with anyone who agrees with our Statement of Faith.",
+    "aliases": [
+      "what denomination are you",
+      "are you affiliated with a denomination",
+      "interdenominational"
+    ]
+  },
+  {
+    "id": "church",
+    "question": "Is Men's Alliance a church?",
+    "answer": "The word church means \"body of believers\" so technically whenever two or three believers are gathered around a fire - that is a church. However, we're not competing with local churches. In fact, we encourage men to attend a local church, get involved and serve in it, and take their families every Sunday.",
+    "aliases": [
+      "is men's alliance a church",
+      "does men's alliance replace church"
+    ]
+  },
+  {
+    "id": "tribe-at-church",
+    "question": "Can I start a Men's Alliance Tribe at my church?",
+    "answer": "Yes! We are partnered with over 120 local churches across the country. We love the church and we want to help it reach more men! That's why we offer Men's Alliance to local churches at no cost! We have a Tribe Launch Team ready to help you!",
+    "aliases": [
+      "can i start a tribe at my church",
+      "bring men's alliance to my church",
+      "partner my church"
+    ]
+  },
+  {
+    "id": "tribe-not-at-church",
+    "question": "Can I start a Tribe that is not at a church?",
+    "answer": "Absolutely! Tribes do not have to be partnered with a local church. You can start a Tribe in a city park, on private property, or even in a county jail. We're all over the place!",
+    "aliases": [
+      "can i start a tribe without a church",
+      "start a tribe in a park",
+      "tribe on private property"
+    ]
+  },
+  {
+    "id": "cult",
+    "question": "Is Men's Alliance a cult?",
+    "answer": "Not at all. One of the trademarks of a cult is that they don't want to let you leave. In Men's Alliance, you're free to walk away if it isn't for you. In America, it's very rare for a group of men to gather outside for a workout and a devotion around a fire. The site of such a simple thing scares some people who have only seen men sitting in cubicles or serving on the church parking team. If the site of Men's Alliance makes you think \"cult!\" then you probably need Men's Alliance.",
+    "aliases": [
+      "is this a cult",
+      "are you a cult"
+    ]
+  },
+  {
+    "id": "discrimination",
+    "question": "Does Men's Alliance discriminate against race, nationality, religion, or sexuality?",
+    "answer": "Absolutely not! All biological men age 13 and up are welcomed to attend Men's Alliance.",
+    "aliases": [
+      "who can attend",
+      "do you discriminate",
+      "what is the age requirement",
+      "how old do you have to be"
+    ]
+  },
+  {
+    "id": "cigars-sinful",
+    "question": "I think smoking cigars is sinful and I believe that Jesus turned water into non-alcoholic grape juice, is Men's Alliance right for me?",
+    "answer": "Probably not.",
+    "aliases": [
+      "is smoking cigars a sin",
+      "is drinking alcohol sinful",
+      "cigars and alcohol sinful"
+    ]
+  },
+  {
+    "id": "skulls",
+    "question": "What's the deal with the skulls?",
+    "answer": "Skulls are not evil or weird. We all have one, and we'll all leave it behind when we die. The image of a skull is a \"memento mori\" - something which reminds us of our own mortality. In Men's Alliance, we use it as a reminder that isolation is terminal, and what kind of legacy will we leave behind.",
+    "aliases": [
+      "why the skulls",
+      "what does the skull mean",
+      "skull logo meaning",
+      "memento mori"
+    ]
+  },
+  {
+    "id": "coffee-cake",
+    "question": "Why do you hate on coffee cake?",
+    "answer": "First of all, we love coffee cake! We just know that men don't bond over it! Men bond during a shared physical struggle. That's why a man's best friend is probably from his days playing a sport or being in the military. Too many churches offer only a breakfast and expect their men to bond over it. In Men's Alliance we offer tire flipping, sledgehammer swinging, and battle ropes instead of coffee cake.",
+    "aliases": [
+      "why do you hate coffee cake",
+      "what's wrong with coffee cake"
+    ]
+  },
+  {
+    "id": "cigar-with-thor",
+    "question": "How do I have a cigar with Thor?",
+    "answer": "The best way to have a Tribe cigar with Thor is by joining the War Council (Patched Tribesmen who give at the Patch Level) or by helping as cadre at an FTX.",
+    "aliases": [
+      "how do i smoke a cigar with thor",
+      "how can i meet thor",
+      "cigar with thor"
+    ]
+  }
+]

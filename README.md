@@ -50,6 +50,29 @@ netlify/functions/corpus.json   indexed source passages (210)
 netlify/functions/roster.json   roster (10,090) — server-only, never public
 ```
 
+## Adding a FAQ
+Curated answers live in `netlify/functions/faqs.json` and are checked BEFORE
+retrieval — a hit returns the fixed answer verbatim and never calls the model.
+To add one, paste this template into the array and edit it (then redeploy):
+
+```json
+{
+  "id": "short-unique-slug",
+  "question": "The question exactly as you want it cited?",
+  "answer": "The approved answer, returned word-for-word. Use \n\n between paragraphs.",
+  "aliases": [
+    "other ways men phrase it",
+    "add one alias per common phrasing"
+  ]
+}
+```
+
+Matching is fuzzy word overlap on `question` + `aliases` (word order,
+punctuation, capitalization, and filler words don't matter). If a real
+question isn't matching, add its phrasing as an alias. Keep aliases specific —
+a one-word alias like "cost" will intercept every question containing that
+word.
+
 ## Updating the source docs or roster later
 - Corpus: replace `corpus.json` and redeploy.
 - Roster: export a fresh ContactsList users CSV plus the tribes-entries CSV

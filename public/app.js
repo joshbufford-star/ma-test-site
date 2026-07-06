@@ -54,21 +54,21 @@ function renderAnswer(d) {
   const page = d.src.page ? ` · p. ${esc(d.src.page)}` : "";
   $("askOut").innerHTML = `
     <div class="card">
-      <div class="ans">${esc(d.answer)}</div>
+      <div class="ans">${esc(d.answer).replace(/\n\n?/g, "<br><br>")}</div>
       ${d.quote ? `<div class="quote">"${esc(d.quote)}"</div>` : ""}
       <div class="cite">
         <span class="tag">${esc(d.src.doc)}</span>
         <span class="tagsub">${esc(d.src.section)}${page}</span>
       </div>
-      <div class="srcwrap">
+      ${d.src.text ? `<div class="srcwrap">
         <button class="srcbtn" id="srcToggle">View full passage</button>
         <div class="srcbody hidden" id="srcBody">${esc(d.src.text)}
           <div class="note">In production this links to the full document for complete context.</div>
         </div>
-      </div>
-      <div class="disc">Answers are drawn from MA source documents. Verify with your leader for official guidance.</div>
+      </div>` : ""}
+      ${d.faq ? "" : `<div class="disc">Answers are drawn from MA source documents. Verify with your leader for official guidance.</div>`}
     </div>`;
-  $("srcToggle").onclick = () => {
+  if ($("srcToggle")) $("srcToggle").onclick = () => {
     const b = $("srcBody"); const hidden = b.classList.toggle("hidden");
     $("srcToggle").textContent = hidden ? "View full passage" : "Hide full passage";
   };

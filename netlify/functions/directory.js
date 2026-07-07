@@ -12,15 +12,13 @@ const CACHE_TTL_MS = 5 * 60 * 1000;
 let credCache = { leaders: null, at: 0 };
 
 async function getLeaders() {
-  const url = process.env.LEADER_CREDS_URL;
-  if (!url) return null; // per-leader logins not configured
   if (credCache.leaders && Date.now() - credCache.at < CACHE_TTL_MS) return credCache.leaders;
   try {
-    const res = await fetch(url, {
+    const res = await fetch(process.env.LEADER_CREDS_URL, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ token: process.env.LEADER_CREDS_TOKEN || "" }),
-      signal: AbortSignal.timeout(4000),
+      signal: AbortSignal.timeout(8000),
     });
     const data = await res.json();
     if (data && data.ok && Array.isArray(data.leaders)) {
@@ -31,10 +29,14 @@ async function getLeaders() {
   return credCache.leaders; // sheet unreachable: stale cache beats a lockout
 }
 
-// true = valid login, false = rejected, null = server not configured
+// true = valid login, false = rejected, null = server not configured,
+// "unavailable" = creds sheet configured but unreachable with no cache.
+// The shared-password fallback applies ONLY when no creds sheet is
+// configured — a slow or failing sheet must never downgrade auth.
 async function authenticate(body) {
-  const leaders = await getLeaders();
-  if (leaders) {
+  if (process.env.LEADER_CREDS_URL) {
+    const leaders = await getLeaders();
+    if (!leaders) return "unavailable";
     const cs = (body.callsign || "").trim().toLowerCase();
     const pw = (body.password || "").trim();
     if (!cs || !pw) return false;
@@ -61,7 +63,8 @@ exports.handler = async (event) => {
 
   const auth = await authenticate(body);
   if (auth === null) return { statusCode: 500, body: JSON.stringify({ error: "Directory not configured: set LEADER_CREDS_URL or LEADER_PASSWORD in Netlify." }) };
-  if (!auth) return { statusCode: 401, body: JSON.stringify({ error: "Invalid leader login." }) };
+  if (auth === "unavailable") return { statusCode: 503, body: JSON.stringify({ error: "The directory is waking up — try again in a few seconds." }) };
+  if (auth !== true) return { statusCode: 401, body: JSON.stringify({ error: "Invalid leader login." }) };
   if (q.length < 2) return { statusCode: 200, body: JSON.stringify({ results: [] }) };
 
   const hits = [];
